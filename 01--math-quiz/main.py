@@ -1,15 +1,4 @@
-from random import randint
-
-def main():
-  question = MathProblem(Difficulty["Moderate"], Subtraction)
-  print(question.ask())
-
-
-Difficulty = {
-  "Easy": 1,
-  "Moderate": 2,
-  "Advanced": 4,
-}
+from random import randint, choice
 
 class MathProblem:
   def __init__(self, difficulty, operator):
@@ -19,11 +8,13 @@ class MathProblem:
 
     self.key = self.operation.operate()
   
-  def textContent(self):
-    return f"{self.x} {self.operation.operator} {self.y} = {self.key}"
+  def equation(self, showKey=True):
+    return f"{self.x:,} {self.operation.operator} {self.y:,} ={f" {self.key:,}" if showKey else ""}"
   
   def ask(self):
-    answer = inputNum(f"What is {self.x} {self.operation.operator} {self.y}? ")
+    return inputNum(f"What is {self.equation(showKey=False)} ")
+  
+  def checkAnswer(self, answer:int|float):
     return answer == self.key
 
 
@@ -75,6 +66,8 @@ def randomNum(digits: int=1) -> int:
     num += randint(0 if n < digits else 1, 9) * (10 ** (n-1))
   return num
 
+def randomOperation():
+  return choice([Addition, Subtraction, Multiplication, Division])
 
 def inputNum(prompt):
   while True:
@@ -85,4 +78,5 @@ def inputNum(prompt):
     except ValueError: pass
 
 if __name__ == "__main__":
-  main()
+  question = MathProblem(2, Subtraction)
+  print(randomOperation())
