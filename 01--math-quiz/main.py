@@ -1,9 +1,9 @@
 from random import randint
-from enum import Enum
 
 def main():
-  question = Question(Difficulty["Moderate"], Division)
-  print(question.textContent())
+  question = MathProblem(Difficulty["Moderate"], Subtraction)
+  print(question.ask())
+
 
 Difficulty = {
   "Easy": 1,
@@ -11,17 +11,20 @@ Difficulty = {
   "Advanced": 4,
 }
 
-class Question:
+class MathProblem:
   def __init__(self, difficulty, operator):
     self.x = randomNum(difficulty)
     self.y = randomNum(difficulty)
-    operation = operator(self.x, self.y)
+    self.operation = operator(self.x, self.y)
 
-    self.operator = operation.operator
-    self.answer = operation.operate()
+    self.key = self.operation.operate()
   
   def textContent(self):
-    return f"{self.x} {self.operator} {self.y} = {self.answer}"
+    return f"{self.x} {self.operation.operator} {self.y} = {self.key}"
+  
+  def ask(self):
+    answer = inputNum(f"What is {self.x} {self.operation.operator} {self.y}? ")
+    return answer == self.key
 
 
 class Addition:
@@ -61,7 +64,7 @@ class Division:
     self.y = y
 
   def operate(self):
-    return self.x / self.y
+    return round((self.x / self.y), 2)
 
 
 def randomNum(digits: int=1) -> int:
@@ -73,4 +76,13 @@ def randomNum(digits: int=1) -> int:
   return num
 
 
-main()
+def inputNum(prompt):
+  while True:
+    _ = input(prompt)
+    try: return int(_)
+    except ValueError: pass
+    try: return float(_)
+    except ValueError: pass
+
+if __name__ == "__main__":
+  main()
