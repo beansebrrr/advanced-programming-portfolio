@@ -10,4 +10,4 @@
 # Quiz
 - [x] Attempts per question
 - [x] Scorer
-- [ ] Difficulty selector
+- [x] Difficulty selector

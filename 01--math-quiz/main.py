@@ -1,82 +1,119 @@
-from random import randint, choice
+"""
+Contains the game loop and most of the top-level functions.
+"""
 
-class MathProblem:
-  def __init__(self, difficulty, operator):
-    self.x = randomNum(difficulty)
-    self.y = randomNum(difficulty)
-    self.operation = operator(self.x, self.y)
-
-    self.key = self.operation.operate()
-  
-  def equation(self, showKey=True):
-    return f"{self.x:,} {self.operation.operator} {self.y:,} ={f" {self.key:,}" if showKey else ""}"
-  
-  def ask(self):
-    return inputNum(f"What is {self.equation(showKey=False)} ")
-  
-  def checkAnswer(self, answer:int|float):
-    return answer == self.key
+from enum import Enum
+from math_problem import MathProblem, inputNum
+from operations import randomOperation
 
 
-class Addition:
-  def __init__(self, x, y):
-    self.operator = "+"
-    self.x = x
-    self.y = y
-
-  def operate(self):
-    return self.x + self.y
-  
-
-class Subtraction:
-  def __init__(self, x, y):
-    self.operator = "-"
-    self.x = x
-    self.y = y
-
-  def operate(self):
-    return self.x - self.y
-
-
-class Multiplication:
-  def __init__(self, x, y):
-    self.operator = "*"
-    self.x = x
-    self.y = y
-
-  def operate(self):
-    return self.x * self.y
-
-
-class Division:
-  def __init__(self, x, y):
-    self.operator = "/"
-    self.x = x
-    self.y = y
-
-  def operate(self):
-    return round((self.x / self.y), 2)
-
-
-def randomNum(digits: int=1) -> int:
-  """Returns a number with a specified number of digits. Defaults to one-digit numbers (1 to 9)"""
-  num = 0
-  for n in range(digits, 0, -1):
-    # Generates an int digit-by-digit
-    num += randint(0 if n < digits else 1, 9) * (10 ** (n-1))
-  return num
-
-def randomOperation():
-  return choice([Addition, Subtraction, Multiplication, Division])
-
-def inputNum(prompt):
+def main():
+  input("Welcome to my Quiz!\n")
   while True:
-    _ = input(prompt)
-    try: return int(_)
-    except ValueError: pass
-    try: return float(_)
-    except ValueError: pass
+    # Initiates the game loop
+    selectDifficulty()
+    quiz = Quiz(QUIZ_DIFFICULTY.value)
+    quiz.play()
+
+    # Prompts for another round
+    if shouldPlayAgain() == False:
+      print("Thanks for playing!")
+      break
+
+
+QUIZ_DIFFICULTY = None
+class Difficulties(Enum):
+  """The values correspond to the number of digits in the operands."""
+  EASY = 1
+  MODERATE = 2
+  ADVANCED = 4
+
+
+class Quiz:
+  def __init__(self, difficulty, numberOfItems=10):
+    self.difficulty = difficulty
+    self.numberOfItems = numberOfItems
+    self.score = 0
+
+
+  def play(self):
+    """Iterates through `n` math problems for the user to solve, tallying the scores to be revealed at the end"""
+    for n in range(self.numberOfItems):
+      print(f"{n+1}. ", end="")
+      self.newItem()
+      
+      if n < self.numberOfItems-1:
+        self.showScore()
+      
+    self.showScore(finalTally=True)
+    
+  
+  def newItem(self, ):
+    """Generates a new math problem for the user to solve. Gives 2 chances by default"""
+    problem = MathProblem(self.difficulty, randomOperation())
+
+    attempts = 2
+    chances = attempts
+
+    while attempts > 0:
+      answer = problem.ask()
+      print("")
+
+      if problem.checkAnswer(answer) == True:
+        score = round(10 * (chances / attempts))
+        print(f"Correct! You add {score:,} to your score")
+        self.score += score
+        break
+      else:
+        chances -= 1
+
+      if attempts - chances == 1:
+        print("Sucks, gotta try again.")
+      elif attempts > 0:
+        print("Still wrong.")
+      else:
+        print(f"Still wrong! Sorry, but the answer was {problem.key:,}.")
+
+
+  def showScore(self, finalTally=False):
+    """Prints out the current / final score on the terminal"""
+    if finalTally:
+      max = self.numberOfItems*10
+      print(f"Your final score is {self.score:,} out of {max:,}.")
+      print("Next time, let's shoot for higher scores, yeah?" if self.score / max < 0.60
+            else "Hey, great job! I'm proud of you.", end="\n\n")
+    else:
+      print(f"You currently have {self.score} points\n")
+
+
+def shouldPlayAgain():
+  """Is an `input()` function that only returns a `bool`"""
+  while True:
+    _ = input("Would you like to play again? [Y/n] ").lower()
+    if _ in ["yes", "y", "true", "t"]:
+      return True
+    elif _ in ["no", "n", "false", "f"]:
+      return False
+
+
+def selectDifficulty():
+  global QUIZ_DIFFICULTY
+  print("Select a difficulty:")
+
+  # Lists out all the difficulties
+  for i, difficulty in enumerate(list(Difficulties), start=1):
+    print(f"{i}. {difficulty.name.capitalize()}")
+
+  # Only accepts values in range before setting new difficulty
+  while True:
+    _ = inputNum("> ", acceptFloat=False)
+    if _ not in range(1, i+1):
+      continue
+
+    QUIZ_DIFFICULTY = list(Difficulties)[_-1]
+    print(f"\nDifficulty is set to {list(Difficulties)[_-1].name.capitalize()}.\n")
+    break
+  
 
 if __name__ == "__main__":
-  question = MathProblem(2, Subtraction)
-  print(randomOperation())
+  main()
