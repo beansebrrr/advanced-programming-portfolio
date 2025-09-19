@@ -1,6 +1,5 @@
 """
 Contains the game loop and most of the top-level functions.
-THIS IS WHAT YOU SHOULD RUN
 """
 
 from enum import Enum
@@ -31,46 +30,39 @@ class Difficulties(Enum):
 
 
 class Quiz:
+    """Carries all the math """
+    score = 0
+    
     def __init__(self, difficulty, numberOfItems=10):
         self.difficulty = difficulty
         self.numberOfItems = numberOfItems
-        self.score = 0
-
 
     def play(self):
         """Iterates through `n` math problems for the user to solve, tallying the scores to be revealed at the end"""
         for n in range(self.numberOfItems):
             print(f"{n+1}. ", end="")
-            self.newItem()
-            
+            self.generateProblem()   
             if n < self.numberOfItems-1:
                 self.showScore()
-
         self.showScore(finalTally=True)
         
     
-    def newItem(self):
+    def generateProblem(self):
         """Generates a new math problem for the user to solve."""
         problem = MathProblem(self.difficulty, randomOperation())
         ATTEMPTS = 2
-        chances = ATTEMPTS
-        while chances > 0:
+        # Give the user `ATTEMPTS` attempts to solve the equation
+        for attempt in range(ATTEMPTS):
             answer = problem.ask()
-            print("")
-            # Validation and scoring logic here.
-            if problem.checkAnswer(answer) == True:
-                # Max score is 10. Decreases every failed attempt.
-                score = round(10 * (chances / ATTEMPTS))
-                self.score += score
-                print(f"Correct! You add {score:,} to your score")
+            if problem.checkAnswer(answer):
+                points = round(10 * ((ATTEMPTS - attempt) / ATTEMPTS))
+                self.score += points
+                print(f"Correct! You add {points:,} to your score")
                 break
-            else:
-                chances -= 1
-
             # Message displayed depends on how many attempts you have left.
-            if ATTEMPTS - chances == 1:
+            elif attempt == 0:
                 print("Sucks, gotta try again.")
-            elif chances > 0:
+            elif attempt < ATTEMPTS-1:
                 print("Still wrong.")
             else:
                 print(f"Still wrong! Sorry, but the answer was {problem.key:,}.")

@@ -32,7 +32,6 @@ class MathProblem:
 
 def randomNum(digits: int=1) -> int:
     """Returns a number with a specified number of digits. Defaults to one-digit numbers (1 to 9)"""
-    
     num = ""
     for n in range(digits, 0, -1):
         # Generates an int digit-by-digit and concatenates as a string
@@ -51,7 +50,3 @@ def inputNum(prompt: str, acceptFloat=True) -> int | float:
         else:
             try: return int(response)
             except ValueError: pass
-
-
-if __name__ == "__main__":
-    pass
