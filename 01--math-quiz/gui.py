@@ -1,19 +1,59 @@
-from math_problem import randomMathProblem
+from math_problem import randomMathProblem, Difficulties
 import tkinter as tk
+from tkinter import ttk
 
-NUM_OF_ITEMS = 1
+
+NUM_OF_ITEMS = 10
 MAX_ATTEMPTS = 2
 MAX_SCORE_PER_ITEM = 10
 
 
-class QuizApp(tk.Tk):
+class StartScreen(tk.Tk):
+    """Difficulty selector. Will create all the quizzes"""
+    
+    difficultyList = [diff.name.capitalize() for diff in Difficulties]
+    def __init__(self):
+        super().__init__()
+        self.title("Vince's Perfect Math Class")
+        self.geometry("300x300")
+
+        header = tk.Label(self,
+                          text="Welcome to Vince's Perfect Math Class",
+                          font=("arial", 18),
+                          wraplength=280,
+                          pady=48)
+
+        self.difficultySelector = ttk.Combobox(self,
+                                               values=self.difficultyList,
+                                               font=("arial", 14))  
+        self.difficultySelector.set("Choose a difficulty")
+        btnStartQuiz = tk.Button(self,
+                                 text="Start Quiz",
+                                 font=("Arial", 14),
+                                 command=self.createQuiz)
+        
+        header.pack(fill="x")
+        self.difficultySelector.pack()
+        tk.Frame(self,height=24).pack()
+        btnStartQuiz.pack()
+
+
+    def createQuiz(self):
+        selected = self.difficultySelector.get()
+        if selected in self.difficultyList:
+            difficulty = Difficulties.__getitem__(selected.upper())
+            QuizApp(difficulty.value, self).mainloop()
+
+
+class QuizApp(tk.Toplevel):
     """All the logic for the Math's quiz"""
     currentItem = 0
     currentScore = 0
 
-    def __init__(self, difficultyValue):
+    def __init__(self, difficultyValue, origin):
         # Initialize the root window
         super().__init__()
+        self.title("Quiz!")
         self.geometry("600x400")
         self.difficultyValue = difficultyValue
         # Build its child elements
@@ -25,6 +65,10 @@ class QuizApp(tk.Tk):
         self.questionLabel.pack()
         self.inputFrame.pack(side="bottom", fill="x")
         self.messageBoard.pack(side="bottom")
+
+        # self.transient(origin)
+        # self.wait_window()
+        self.grab_set()
     
     def displayQuizResult(self):
         # Delete everything currently on the window
@@ -150,5 +194,4 @@ class InputFrame(tk.Frame):
             except ValueError: pass
 
 
-quiz = QuizApp(2)
-quiz.mainloop()
+StartScreen().mainloop()

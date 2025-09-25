@@ -2,8 +2,17 @@
 Contains all the logic for individual math problems.
 """
 
-from random import randint
+from enum import Enum
 from operations import Operation, randomOperation
+from random import randint
+
+
+class Difficulties(Enum):
+    """The values correspond to the number of digits in the operands."""
+    EASY = 1
+    MODERATE = 2
+    ADVANCED = 4
+
 
 def randomMathProblem(difficultyValue: int):
     operation = randomOperation()

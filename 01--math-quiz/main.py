@@ -2,8 +2,8 @@
 Contains the game loop and most of the top-level functions.
 """
 
-from enum import Enum
-from math_problem import MathProblem, inputNum
+
+from math_problem import MathProblem, Difficulties, inputNum
 from operations import randomOperation
 
 
@@ -22,11 +22,6 @@ def main():
             break
 
 
-class Difficulties(Enum):
-    """The values correspond to the number of digits in the operands."""
-    EASY = 1
-    MODERATE = 2
-    ADVANCED = 4
 
 
 class Quiz:
