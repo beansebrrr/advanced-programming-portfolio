@@ -42,7 +42,7 @@ class StartScreen(tk.Tk):
         selected = self.difficultySelector.get()
         if selected in self.difficultyList:
             difficulty = Difficulties.__getitem__(selected.upper())
-            QuizApp(difficulty.value, self).mainloop()
+            QuizApp(difficulty).mainloop()
 
 
 class QuizApp(tk.Toplevel):
@@ -50,12 +50,12 @@ class QuizApp(tk.Toplevel):
     currentItem = 0
     currentScore = 0
 
-    def __init__(self, difficultyValue, origin):
+    def __init__(self, difficulty):
         # Initialize the root window
         super().__init__()
         self.title("Quiz!")
         self.geometry("600x400")
-        self.difficultyValue = difficultyValue
+        self.difficulty = difficulty
         # Build its child elements
         self.questionLabel = tk.Label(self, font=("arial", 18), pady=24)
         self.messageBoard = MessageBoard(self)
@@ -66,8 +66,6 @@ class QuizApp(tk.Toplevel):
         self.inputFrame.pack(side="bottom", fill="x")
         self.messageBoard.pack(side="bottom")
 
-        # self.transient(origin)
-        # self.wait_window()
         self.grab_set()
     
     def displayQuizResult(self):
@@ -81,20 +79,35 @@ class QuizApp(tk.Toplevel):
 
         frame = tk.Frame(self)
         toptextLabel = tk.Label(frame,
-                               text="You have a total score of",
+                               text="Your final grade is",
                                font=("TkDefaultFont", 14))
         resultLabel = tk.Label(frame,
-                               text=self.currentScore,
+                               text=self.getGrade(),
                                font=("TkDefaultFont", 24, "bold"),
                                foreground=scoreColor,)
         subtextLabel = tk.Label(frame,
-                                text=f"Out of {maxScore}",
+                                text=f"{self.currentScore} out of {maxScore}",
                                 font=("TkDefaultFont", 14))
         toptextLabel.pack()
         resultLabel.pack()
         subtextLabel.pack()
         frame.pack(pady=100)
+
+    def getGrade(self):
+        average = (self.currentScore / (NUM_OF_ITEMS * MAX_SCORE_PER_ITEM)) * 100
+        print(average)
+        if average >= 90:
+            return "A"
+        elif 70 <= average < 90:
+            return "B"
+        elif 60 <= average < 70:
+            return "C"
+        elif 50 <= average < 60:
+            return "D"
+        else:
+            return "F"
         
+
     def questionResult(self, answerIsCorrect: bool):
         if answerIsCorrect:
             # Score decreases every failed attempt for each item
@@ -127,10 +140,11 @@ class QuizApp(tk.Toplevel):
         self.updateMathProblem()
         newEquation = self.currentMathProblem.equation(showKey=False)
         self.questionLabel.config(text=f"{self.currentItem}. What is {newEquation} ?")
+        self.inputFrame.showBtnSubmit()
         self.messageBoard.clear()
 
     def updateMathProblem(self):
-        self.currentMathProblem = randomMathProblem(self.difficultyValue)
+        self.currentMathProblem = randomMathProblem(self.difficulty.value)
 
     def checkEntry(self):
         answer = self.inputFrame.getEntryFieldInput()
@@ -186,12 +200,14 @@ class InputFrame(tk.Frame):
         """Convert entry's string into an int or float"""
         entry = self.entryField.get()
         entry = entry.replace(",","")
+        
         try:
-            try: return int(entry)
-            except ValueError: pass
-        except ValueError:
+            return int(entry)
+        except ValueError: 
             try: return float(entry)
             except ValueError: pass
 
 
-StartScreen().mainloop()
+
+if __name__ == "__main__":
+    StartScreen().mainloop()
