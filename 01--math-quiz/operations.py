@@ -44,7 +44,7 @@ class Subtraction(Operation):
 
 
 class Multiplication(Operation):
-    operator = "*"
+    operator = "\u00D7"
     isComplex = True
     def __init__(self, x, y):
         super().__init__(x, y)
@@ -54,7 +54,7 @@ class Multiplication(Operation):
 
 
 class Division(Operation):
-    operator = "/"
+    operator = "\u00F7"
     isComplex = True
     def __init__(self, x, y):
         super().__init__(x, y)

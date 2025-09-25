@@ -12,9 +12,9 @@ def randomMathProblem(difficultyValue: int):
     if not operation.isComplex or difficultyValue <= 1:
         y = randomNum(difficultyValue)
     elif difficultyValue >= 2:
-        y = randomNum(difficultyValue/2)
+        y = randomNum(difficultyValue // 2)
 
-    return MathProblem(difficultyValue, operation)
+    return MathProblem(difficultyValue, operation, x=x, y=y)
 
 
 class MathProblem:
