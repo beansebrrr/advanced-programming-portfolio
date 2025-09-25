@@ -9,9 +9,9 @@ from operations import Operation
 class MathProblem:
     """Generates a math problem"""
 
-    def __init__(self, operandDigitCount: int, operation: type[Operation]):
-        self.x = randomNum(operandDigitCount)
-        self.y = randomNum(operandDigitCount)
+    def __init__(self, operandDigitCount: int, operation: type[Operation], x=0, y=0):
+        self.x = x if x else randomNum(operandDigitCount)
+        self.y = y if y else randomNum(operandDigitCount)
         self.operation = operation(self.x, self.y)
         self.key = self.operation.operate()
     
