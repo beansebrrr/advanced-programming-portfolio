@@ -25,6 +25,7 @@ class Operation:
 
 class Addition(Operation):
     operator = "+"
+    isComplex = False
     def __init__(self, x, y):
         super().__init__(x, y)
 
@@ -34,6 +35,7 @@ class Addition(Operation):
 
 class Subtraction(Operation):
     operator = "-"
+    isComplex = False
     def __init__(self, x, y):
         super().__init__(x, y)
 
@@ -43,6 +45,7 @@ class Subtraction(Operation):
 
 class Multiplication(Operation):
     operator = "*"
+    isComplex = True
     def __init__(self, x, y):
         super().__init__(x, y)
 
@@ -52,6 +55,7 @@ class Multiplication(Operation):
 
 class Division(Operation):
     operator = "/"
+    isComplex = True
     def __init__(self, x, y):
         super().__init__(x, y)
 

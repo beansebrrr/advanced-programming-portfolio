@@ -3,7 +3,18 @@ Contains all the logic for individual math problems.
 """
 
 from random import randint
-from operations import Operation
+from operations import Operation, randomOperation
+
+def randomMathProblem(difficultyValue: int):
+    operation = randomOperation()
+    x = randomNum(difficultyValue)
+    y = None
+    if not operation.isComplex or difficultyValue <= 1:
+        y = randomNum(difficultyValue)
+    elif difficultyValue >= 2:
+        y = randomNum(difficultyValue/2)
+
+    return MathProblem(difficultyValue, operation)
 
 
 class MathProblem:
@@ -18,11 +29,11 @@ class MathProblem:
     def equation(self, showKey: bool=True):
         """Returns the formatted mathematical expression"""
         operatorSymbol = self.operation.operator
-        key = f" {self.key:,}" if showKey else ""
-        return f"{self.x:,} {operatorSymbol} {self.y:,} ={key}"
+        key = f" = {self.key:,}" if showKey else ""
+        return f"{self.x:,} {operatorSymbol} {self.y:,}{key}"
     
     def ask(self):
-        return inputNum(f"What is {self.equation(showKey=False)} ")
+        return f"What is {self.equation(showKey=False)}?"
     
     def checkAnswer(self, answer: int | float) -> bool:
         return answer == self.key
