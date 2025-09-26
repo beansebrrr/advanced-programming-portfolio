@@ -12,7 +12,7 @@ def readFile():
     with open(textFileDir) as file:
         file.readline()
         for line in file:
-            students += parseTextLine(line)
+            students += [parseTextLine(line)]
     return students
        
 

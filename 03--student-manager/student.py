@@ -19,6 +19,15 @@ class Student:
         self.courseMarks = courseMarks
         self.examMarks = examMarks
 
+    @classmethod
+    def fromParsed(cls, parsedLine: list[str|int|list[int]]):
+        """Creates a Student out of a parsed text line"""
+        studentId = parsedLine[0]
+        studentName = parsedLine[1]
+        courseMarks = parsedLine[2]
+        examMarks = parsedLine[3]
+        return cls(studentId, studentName, courseMarks, examMarks)
+
     def info(self):
         """Returns a string of student's information."""
         # `dedent()` is just used for cleaner code formatting
@@ -55,3 +64,4 @@ class Student:
             return "D"
         else:
             return "F"
+
