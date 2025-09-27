@@ -28,24 +28,6 @@ class Student:
         examMarks = parsedLine[3]
         return cls(studentId, studentName, courseMarks, examMarks)
 
-    def info(self):
-        """Returns a string of student's information."""
-        # `dedent()` is just used for cleaner code formatting
-        infoString = dedent(f"""\
-            Name: {self.name}
-            I.D. Number: {self.idNum}
-            Course Marks:
-        """)
-        # Format the course marks as a list
-        for mark in self.courseMarks:
-            infoString += f"  - {mark}\n"
-        # Continuation
-        infoString += dedent(f"""\
-            Exam marks: {self.examMarks}
-            Final Grade: {self.generalAverage():.2%} | {self.grades()}
-        """)
-        return infoString
-
     def generalAverage(self):
         totalMarks = sum(self.courseMarks) + self.examMarks
         maxMarks = EXAM_MARKS_MAX + (COURSE_MARKS_MAX * NUM_OF_COURSES)

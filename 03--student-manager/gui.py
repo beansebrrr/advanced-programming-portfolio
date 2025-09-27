@@ -1,60 +1,59 @@
-from file_reader import readFile
-from student import Student
+from components import *
+from sort_filter import *
 import tkinter as tk
-
-# It looks so beautiful
-STUDENTS = [Student.fromParsed(line) for line in readFile()]
+from tkinter import ttk
 
 
-class StudentCard(tk.Frame):
-    def __init__(self, master: tk, student: Student):
-        super().__init__(master)
+class Root(tk.Tk):
+    def __init__(self):
+        super().__init__()
+        self.geometry("720x480")
         self.config(
-            border=6,
-            relief=tk.RAISED,
-            padx=24,
-            pady=16,
+            padx=12,
+            pady=12,
+        )
+        self.studentList = StudentList(self)
+        filterFrame = tk.Frame(
+            self,
+            pady=24
+        )
+        studentSelectorFrame = tk.Frame(
+            filterFrame
+        )
+        studentSelectorFrame.columnconfigure(0, weight=2)
+        studentSelectorFrame.columnconfigure(1, weight=0)
+
+        self.studentSelector = ttk.Combobox(
+            studentSelectorFrame,
+            values=[student.name for student in STUDENTS],         
+        )
+        self.studentSelector.set("Select a student")
+        studentSelectorButton = tk.Button(
+            studentSelectorFrame,
+            text="Find",
+            command=self.search
+        )
+        showAllButton = tk.Button(
+            filterFrame,
+            text="Show All Students",
+            command=self.studentList.displayStudents
         )
 
-        self.columnconfigure(0, weight=1, minsize=150)
-        self.columnconfigure(1, weight=3)
-
-        courseMarkStr = ""
-        for mark in student.courseMarks:
-            courseMarkStr += f"\u2022 {mark}\n"
-        
-        Field(self, "Name", student.name, 0)
-        Field(self, "I.D. Number", student.idNum, 1)
-        Field(self, "Course Marks", courseMarkStr, 2)
-        Field(self, "Assessment Marks", student.examMarks, 3)
+        self.studentSelector.grid(column=0, row=0)
+        studentSelectorButton.grid(column=1, row=0)
+        studentSelectorFrame.pack(side="left")
+        showAllButton.pack(side="right")
 
 
-class Field:
-    def __init__(self, master, name, value, row):
-        tk.Label(
-            master,
-            text=name,
-            anchor="nw",
-            justify="left",
-            pady=6,
-            padx=12,
-        ).grid(column=0, row=row, sticky=tk.E)
-
-        tk.Label(
-            master,
-            text=value,
-            anchor="nw",
-            justify="left",
-            font=("helvetica", 14),
-            pady=6
-        ).grid(column=1, row=row, sticky=tk.W)
-
-
-
-root = tk.Tk()
-
-for student in STUDENTS:
-    StudentCard(root, student).pack(fill="x")
+        filterFrame.pack(anchor="w", fill="x")
+        self.studentList.pack(fill="x")
     
+    def search(self):
+        searchTerm = self.studentSelector.get()
+        if searchTerm in [student.name for student in STUDENTS]:
+            self.studentList.displayStudents(
+                searchByName(searchTerm)
+            )
 
-root.mainloop()
+
+Root().mainloop()
