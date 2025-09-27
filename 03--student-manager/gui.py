@@ -6,6 +6,7 @@ from tkinter import ttk
 
 rootWindow = tk.Tk()
 rootWindow.geometry("720x480")
+rootWindow.title("Student Manager")
 rootWindow.config(padx=12, pady=12)
 studentList = StudentList(rootWindow)
 
@@ -54,6 +55,13 @@ def main():
     sortByNameBtn_asc.pack(side="right")
     tk.Label(sortFrame, text="Sort by name", padx=12).pack(side="right")
 
+    tk.Label(
+        rootWindow,
+        text="Student Manager",
+        font=("mono", 16, "bold"),
+    ).pack()
+    # Spacer
+    tk.Frame(rootWindow, height=24).pack()
     filterFrame.pack(fill="x")
     sortFrame.pack(fill="x")
     # Spacer
@@ -74,6 +82,7 @@ class StudentSelector(tk.Frame):
             self,
             values=[student.name for student in STUDENTS],
         )
+        self.studentSelector.set("Select a student")
         studentSelectorBtn = tk.Button(
             self,
             text="Find",
