@@ -1,3 +1,0 @@
-- [ ] Read student marks format
-- [ ] Create student class around it
-- [ ] File access
