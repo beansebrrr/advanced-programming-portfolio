@@ -47,6 +47,8 @@ class StudentList(ttk.Frame):
 
 
     def displayStudents(self, students: list[Student]=STUDENTS):
+        """Displays student cards generated from a filtered list of students.
+        Defaults to displaying all students."""
         self.clear()
         for student in students:
             StudentCard(self.innerFrame, student).pack(fill="x")
@@ -54,64 +56,70 @@ class StudentList(ttk.Frame):
 
         
     def clear(self):
-        """Delete all child elements (will be used for sorting and filtering)"""
+        """Delete all child elements"""
         for child in self.innerFrame.winfo_children():
             child.destroy()
 
 
 class StudentCard(tk.Frame):
+    """Card displaying a student's information."""
     def __init__(self, master: tk, student: Student):
         super().__init__(master)
+        # Make it look like a card
         self.config(
-            border=6,
-            relief=tk.RAISED,
+            border=12,
             padx=24,
             pady=16,
+            relief="groove"
         )
-
         self.columnconfigure(0, weight=1)
         self.columnconfigure(1, weight=3)
         self.columnconfigure(2, weight=1)
 
+        # Formatting the courseMarks list to a string
         courseMarkStr = ""
         for mark in student.courseMarks:
             courseMarkStr += f"\u2022 {mark}\n"
         
-        Field(self, "Name", student.name, 0)
-        Field(self, "I.D. Number", student.idNum, 1)
-        Field(self, "Course Marks", courseMarkStr, 2)
-        Field(self, "Assessment Marks", student.examMarks, 3)
+        # Basic student info here
+        createField(self, "Name", student.name, 0)
+        createField(self, "I.D. Number", student.idNum, 1)
+        createField(self, "Course Marks", courseMarkStr, 2)
+        createField(self, "Assessment Marks", student.examMarks, 3)
 
+        # Shows off the student's grade 
         gradeFrame = tk.Frame(self)
         grade = tk.Label(
             gradeFrame,
             text=f"{student.grades()}",
-            font=("Times New Roman", 24, "bold"))
+            font=("Times New Roman", 32, "bold"))
         percentage = tk.Label(
             gradeFrame,
-            text=f"General Average of {student.generalAverage():.2%}",
-            font=("Times New Roman", 12))
+            text=f"General Average\nof {student.generalAverage():.2%}",
+            font=("mono", 12))
+        
         grade.pack(anchor="center")
         percentage.pack(anchor="center")
         gradeFrame.grid(column=2, row=0, rowspan=4)
 
 
-class Field:
-    def __init__(self, master, name, value, row):
-        tk.Label(
-            master,
-            text=name,
-            anchor="nw",
-            justify="left",
-            pady=6,
-            padx=12,
-        ).grid(column=0, row=row, sticky=tk.NW)
+def createField(master, name, value, row):
+    """Student info field."""
+    tk.Label(
+        master,
+        text=name,
+        anchor="nw",
+        justify="left",
+        font=("mono", 12),
+        pady=6,
+        padx=12,
+    ).grid(column=0, row=row, sticky=tk.NW)
 
-        tk.Label(
-            master,
-            text=value,
-            anchor="nw",
-            justify="left",
-            font=("helvetica", 14),
-            pady=6,
-        ).grid(column=1, row=row, sticky=tk.NW)
+    tk.Label(
+        master,
+        text=value,
+        anchor="nw",
+        justify="left",
+        font=("serif", 14),
+        pady=6,
+    ).grid(column=1, row=row, sticky=tk.NW)

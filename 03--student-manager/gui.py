@@ -3,7 +3,7 @@ from sort_filter import *
 import tkinter as tk
 from tkinter import ttk
 
-
+# Root is here for global access
 rootWindow = tk.Tk()
 rootWindow.geometry("720x480")
 rootWindow.title("Student Manager")
@@ -19,8 +19,7 @@ def main():
         text="Show All Students",
         command=studentList.displayStudents
     )
-    
-
+    # Sorting
     sortFrame = tk.Frame(rootWindow, pady=2)
     highestScoreBtn = tk.Button(
         sortFrame,
@@ -32,8 +31,6 @@ def main():
         text="Lowest Score",
         command=displayLowestScore
     )
-
-    # Sorting
     sortByNameBtn_asc = tk.Button(
         sortFrame,
         text="Ascending",
@@ -72,6 +69,7 @@ def main():
 
 
 class StudentSelector(tk.Frame):
+    """Component group for selecting and filtering only one student"""
     def __init__(self, master):
         super().__init__(master)
 
@@ -99,6 +97,7 @@ class StudentSelector(tk.Frame):
             studentList.displayStudents(searchByName(selectedStudent))
 
 
+# Command functions to filter and sort the student cards
 def displayHighestScore():
     studentList.displayStudents(getHighestScore())
 

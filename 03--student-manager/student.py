@@ -1,5 +1,6 @@
-from textwrap import dedent
-
+"""
+Contains the student class. For easy management.
+"""
 
 COURSE_MARKS_MAX = 20
 EXAM_MARKS_MAX = 100
