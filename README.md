@@ -1,10 +1,11 @@
 # Advanced Programming Portfolio
 
-This is a compilation of programs that I have created for my first assessment in Advanced Programming for Creative Computing.
+This is a compilation of programs that I have created for my first assessment in Advanced Programming for Creative Computing using Python and the Tkinter module.
 
 ## Prerequisites
 
 - Python (I use 3.12 but you might get away with 3.6 and up)
+- Tkinter module (should already come with Python)
 
 ## Virtual Environment (optional)
 
@@ -24,10 +25,16 @@ python -m venv .venv    # Create venv
 
 ## Running the projects
 
-In each folder, I always name the main scripts `main.py`. You just need to run that one to see the whole thing. 
+The applications are separated into multiple scripts, but running the whole project should be as easy as running `gui.py`
 
 ```bash
-python main.py
+# Make sure you're in the project's directory:
+# cd [0X--project-name]
+python gui.py   # Or `python3 gui.py`
 ```
 
-And well, you know, running the scripts with VS Code works too.
+Or if you're more used to doing it in VS Code:
+
+1. Open `gui.py`.
+2. Run it by clicking the "play" icon on the right side of the tab bar.
+3. Enjoy.
