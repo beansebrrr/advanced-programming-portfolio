@@ -16,20 +16,21 @@ class StartScreen(tk.Tk):
         super().__init__()
         self.title("Vince's Perfect Math Class")
         self.geometry("300x300")
+        self.resizable(0, 0)
 
         header = tk.Label(self,
                           text="Welcome to Vince's Perfect Math Class",
-                          font=("arial", 18),
+                          font=("mono", 18, "bold"),
                           wraplength=280,
                           pady=48)
 
         self.difficultySelector = ttk.Combobox(self,
                                                values=self.difficultyList,
-                                               font=("arial", 14))  
+                                               font=("mono", 12))  
         self.difficultySelector.set("Choose a difficulty")
         btnStartQuiz = tk.Button(self,
                                  text="Start Quiz",
-                                 font=("Arial", 14),
+                                 font=("mono", 14),
                                  command=self.createQuiz)
         
         header.pack(fill="x")
@@ -55,9 +56,10 @@ class QuizApp(tk.Toplevel):
         super().__init__()
         self.title("Quiz!")
         self.geometry("600x400")
+        self.resizable(0, 0)
         self.difficulty = difficulty
         # Build its child elements
-        self.questionLabel = tk.Label(self, font=("arial", 18), pady=24)
+        self.questionLabel = tk.Label(self, font=("mono", 18), pady=24)
         self.messageBoard = MessageBoard(self)
         self.inputFrame = InputFrame(self)
         # Start the loop right away
@@ -95,7 +97,6 @@ class QuizApp(tk.Toplevel):
 
     def getGrade(self):
         average = (self.currentScore / (NUM_OF_ITEMS * MAX_SCORE_PER_ITEM)) * 100
-        print(average)
         if average >= 90:
             return "A"
         elif 70 <= average < 90:
@@ -160,8 +161,9 @@ class MessageBoard(tk.Label):
 
     def __init__(self, master):
         super().__init__(master,
-                         font=("arial", 14),
-                         pady=12)
+                         font=("mono", 14),
+                         pady=12,
+                         wraplength=550)
 
     def clear(self):
         self.config(text="")
@@ -178,8 +180,8 @@ class InputFrame(tk.Frame):
     def __init__(self, master):
         super().__init__(master)
         # Create all input elements
-        self.entryField = tk.Entry(self, font=("arial", 16))
-        self.btn = tk.Button(self, font=("arial", 12))
+        self.entryField = tk.Entry(self, font=("mono", 16))
+        self.btn = tk.Button(self, font=("mono", 12))
         self.showBtnSubmit()
         self.entryField.pack(fill="x")
         self.btn.pack(fill="x")
