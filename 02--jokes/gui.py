@@ -67,7 +67,6 @@ class JokePopup(tk.Toplevel):
             font=("arial", 18),
             wraplength=250,
             pady=48,
-            background=None,
         )
         self.btnShowPunchline = tk.Button(
             self,

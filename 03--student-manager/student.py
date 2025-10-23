@@ -21,13 +21,13 @@ class Student:
         self.examMarks = examMarks
 
     @classmethod
-    def fromParsed(cls, parsedLine: list[str|int|list[int]]):
+    def fromParsed(cls, parsedLine):
         """Creates a Student out of a parsed text line"""
         studentId = parsedLine[0]
         studentName = parsedLine[1]
         courseMarks = parsedLine[2]
         examMarks = parsedLine[3]
-        return cls(studentId, studentName, courseMarks, examMarks)
+        return cls(studentId, studentName, courseMarks, examMarks) 
 
     def generalAverage(self):
         totalMarks = sum(self.courseMarks) + self.examMarks

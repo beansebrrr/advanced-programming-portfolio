@@ -14,7 +14,7 @@ def readJokesFile():
     """Returns a 2-dimensional array containing all the jokes and responses from a .txt file"""
     with open(jokesDirectory) as file:
         # Split all the jokes
-        jokes = file.read().split("\n")
+        jokes = file.readlines()
         # Split the questions from the responses
         jokes = list(map(lambda joke: joke.split("?",), jokes))
         return jokes
